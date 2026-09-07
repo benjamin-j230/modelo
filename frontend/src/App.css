@@ -1,4 +1,23 @@
 
+.print-item {
+    display: none;
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    .print-item {
+        display: block;
+        visibility: visible;
+    }
+
+    .print-item * {
+        visibility: visible;
+    }
+}
+
 .App {
   text-align: center;
 }

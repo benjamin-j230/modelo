@@ -1,0 +1,10 @@
+const router=require('express').Router()
+const sellerController=require('../controllers/sellerControllers')
+const middleWare=require('../controllers/middleWare')
+router.get("/profile",middleWare.auth,sellerController.getSeller)
+router.post("/addProduct",middleWare.auth,middleWare.upload.single('image'),sellerController.addProduct)
+router.post("/location",sellerController.saveLocation)
+router.post("/acceptOrder",sellerController.acceptOrder)
+router.get("/getAcceptedOrders",middleWare.auth,sellerController.getAcceptedOrder)
+router.patch("/status/:id",middleWare.auth,sellerController.updateStatus)
+module.exports=router
