@@ -54,10 +54,10 @@ export default function Login() {
 
                 <h1 className='text-red-500 font-bold absolute top-[20px] text-2xl'>{localStorage.getItem("role")} login</h1>
                 <label className="absolute top-[80px] left-[30px] text-white text-lg font-semibold max-[500px]:top-[140px] max-w-full" >Email: </label>
-                <input type="text" placeholder="Email" className="w-[260px] h-8 absolute top-[80px] rounded-2xl border-2 focus:border-black focus:scale-105 max-[500px]:w-[180px] max-[500px]:left-[130px] max-[500px]:text-md max-[500px]:top-[140px] max-w-full" onChange={(e) => setEmail(e.target.value)} ></input>
+                <input type="text" placeholder="Email" className="w-[260px] h-8 absolute top-[80px] rounded-2xl border-2 focus:border-black focus:scale-105 max-[500px]:w-[180px] max-[500px]:left-[130px] max-[500px]:text-md max-[500px]:top-[140px] max-w-full pl-2" onChange={(e) => setEmail(e.target.value)} ></input>
 
                 <label className="absolute top-[130px] left-[30px] text-white text-lg font-semibold max-[500px]:top-[180px] max-w-full" >Password: </label>
-                <input type="password" placeholder="Password" className="w-[260px] h-8 absolute top-[130px] rounded-2xl border-2 focus:border-black focus:scale-105 max-[500px]:w-[180px] max-[500px]:left-[130px] max-[500px]:text-md max-[500px]:top-[180px] max-w-full" onChange={(e) => setPassword(e.target.value)} ></input>
+                <input type="password" placeholder="Password" className="w-[260px] h-8 absolute top-[130px] rounded-2xl border-2 focus:border-black focus:scale-105 max-[500px]:w-[180px] max-[500px]:left-[130px] max-[500px]:text-md max-[500px]:top-[180px] max-w-full  pl-2" onChange={(e) => setPassword(e.target.value)} ></input>
 
 
                 <button className="absolute bottom-[150px] max-[500px]:bottom-[300px] right-[120px] bg-white h-[30px] w-[50px] text-red-700 font-bold shadow-[0 0 8px black] max-[500px]:bottom-[450px] max-[500px]:right-[40px] active:text-black hover:scale-105 max-w-full" onClick={handleNext} >next</button>

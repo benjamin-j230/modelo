@@ -70,7 +70,7 @@ export default function EmailVerification() {
     }
     return (
         <div className=' flex justify-center items-center h-screen w-screen bg-cover bg-no-repeat' style={{ backgroundImage: `url(${bgImage})` }}>
-            <div className='flex justify-center shadow-[0_0_8px_black] rounded-3xl object-center bg-black/50 max-[500px]:w-screen sm:w-screen min-[700px]:max-[1030px]:w-[600px] max-[500px]:h-screen sm:h-screen max-[500px]:rounded-none  md:h-1/2 relative'>
+            <div className='flex justify-center shadow-[0_0_8px_black] rounded-3xl object-center bg-black/50 max-[500px]:w-screen w-[600px] min-[700px]:max-[1030px]:w-[600px] max-[500px]:h-screen sm:h-screen max-[500px]:rounded-none  md:h-1/2 relative'>
                 <GoogleButton onClick={auth} />
             </div>
         </div>
