@@ -19,7 +19,7 @@ export default function ViewModel() {
   const dropdownRef = useRef()
   const { user, setUser, emailLogin, setEmailLogin } = useContext(thisContext)
   const [seller,setSeller]=useState([])
-
+  const [locationName,setLocationName]=useState("")
 
 
 
@@ -159,7 +159,35 @@ export default function ViewModel() {
     );
   };
 
+ 
+function LocationName({ seller, className }) {
+  const [locationName, setLocationName] = useState("");
 
+  useEffect(() => {
+    seller.location&&
+    getLocationName(
+      seller.location.coordinates[1],
+      seller.location.coordinates[0]
+    )
+  
+  }, [seller]);
+
+  async function getLocationName(latitude, longitude) {
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+      );
+
+      const data = await res.json();
+
+      setLocationName(data.display_name);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  return <p className={className}>{locationName}</p>;
+}
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -381,6 +409,7 @@ export default function ViewModel() {
             seller.map(seller=>(
               <div className="h-[50vh] w-[80vw] relative left-[10vw] bg-black mb-16 hover:scale-105 ">
                 <h1 className="text-red-700 font-bold text-2xl relative top-[30px] left-[40px]">{seller.shop}</h1>
+               <LocationName seller={seller} className="text-gray-500 text-sm relative top-[30px] left-[30px] " />
                
                 </div>
             ))
@@ -391,11 +420,19 @@ export default function ViewModel() {
           </div>
 
         </div>
+        
+<footer className="bg-black w-full h-[30vh] absolute bottom-0 overflow-x-hidden flex justify-center" >
+  <div className="relative max-[500px]:top-[30px] bottom-[50px] flex w-full items-center lg:w-auto">
+            <div className="mt-0 text-2xl font-bold uppercase tracking-[0.2em] text-[#ff8a7a] max-[500px]:text-xl">
+              Modelo
+            </div>
+          </div>
+</footer>
       </div>
 
 
 
-
     </div>
+    
   )
 }

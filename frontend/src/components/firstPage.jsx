@@ -1,7 +1,16 @@
 import {useNavigate} from 'react-router-dom'
+import { useEffect } from 'react'
 import bgImage from "./images/background-2.jpg"
 export default function FirstPage(){
 const nav=useNavigate()
+  useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const message = params.get("message");
+
+        if (message==="seller_verification") {
+            alert("Please wait for the admin to verify your account.");
+        }
+    }, []);
     return(
         <div className=' flex justify-center items-center h-screen w-screen bg-cover bg-no-repeat' style={{ backgroundImage: `url(${bgImage})` }}>
             <div className='shadow-[0_0_8px_black] rounded-3xl object-center bg-black/50 [@media(min-width:700px)_and_(max-width:1030px)]:w-[600px] max-[500px]:w-full sm:w-screen md:w-1/3 max-[500px]:h-screen sm:h-screen max-[500px]:rounded-none mx-auto  md:h-1/2 relative flex flex-col justify-center items-center gap-[20px]'>

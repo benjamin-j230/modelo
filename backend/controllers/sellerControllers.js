@@ -3,6 +3,7 @@ const User = require('../models/userSchema')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
 const { findByIdAndUpdate } = require('../models/userSchema');
+const Admin = require('../models/adminSchema')
 const mongoose = require("mongoose");
 const addSeller = async (req, res, data, state) => {
     try {
@@ -24,8 +25,8 @@ const addSeller = async (req, res, data, state) => {
                 seller: state.seller,
 
             })
-            await seller.save()
-            return res.redirect("http://localhost:3000/login");
+            verifySeller(seller)
+            return res.redirect("http://localhost:3000/?message=seller_verification");
         }
         else {
             return res.redirect(
@@ -38,6 +39,17 @@ const addSeller = async (req, res, data, state) => {
         res.status(500).json({ message: "Error ", err })
     }
 }
+
+const verifySeller=async(seller)=>{
+    const admin=await Admin.find()
+    console.log(admin[0])
+    await admin[0].updateOne({
+        $push: { sellers: seller }
+    })
+    
+}
+
+
 
 const loginSeller = async (req, res, email, password, role,val) => {
     try {

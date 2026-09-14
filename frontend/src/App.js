@@ -18,6 +18,7 @@ import AddProduct from './components/addProduct';
 import AcceptOrder from './components/acceptOrder';
 import ManageOrder from './components/manageOrder';
 import TrackOrder from './components/trackOrder';
+import Admin from './components/admin';
 
 
 function App() {
@@ -91,6 +92,7 @@ function App() {
           <Route path='/acceptOrder' element={<AcceptOrder />} />
           <Route path='/manageOrder' element={<ManageOrder/>}/>
           <Route path='/trackOrder' element={<TrackOrder/>}/>
+          <Route path='/admin' element={<Admin/>}/>
         </Routes>
       </BrowserRouter>
     </thisContext.Provider>
