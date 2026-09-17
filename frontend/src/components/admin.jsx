@@ -11,9 +11,19 @@ export default function Admin() {
         async function fetchData() {
             const res = await axios.get(`http://localhost:5000/admin/sellers`)
             setSellers(res.data)
+            console.log(res.data)
         }
         fetchData()
-    })
+    },[])
+
+    async function handleSellerApproval(sellerId){
+        try{
+            const res = await axios.post(`http://localhost:5000/admin/sellerApproval`, {sellerId})
+        }catch(err){
+            console.log(err)
+        }
+
+    }
 
 
     return (
@@ -47,8 +57,17 @@ export default function Admin() {
                             <div className="min-h-full w-full basis-full -mt-[30vh] flex justify-center gap-5 ">
                                 {
                                     sellers.map(seller=>(
-                                        <div className="w-[20vw] h-[50vh] border border-red-700 rounded-xl bg-slate-950" >
-                                            <h1 className="text-white text-2xl " >{seller.shop}</h1>
+                                        <div className="w-fit min-w-[20vw] h-[50vh] border border-red-700 rounded-xl bg-slate-950 justify-center" key={seller._id} >
+                                            <h1 className="text-white text-2xl text-center" >{seller.shop}</h1><br/>
+                                            <h1 className="text-white text-lg pl-[50px]" >Address: {seller.address[0].street},</h1>
+                                            <h1 className="text-white text-lg pl-[120px] ">{seller.address[0].city}</h1>
+
+                                            <h1 className="text-white text-lg pl-[120px] ">{seller.address[0].state}</h1>
+                                            <h1 className="text-white text-lg pl-[50px]">Pin code: {seller.address[0].pinCode}</h1>
+                                            <h1 className="text-white text-lg pl-[50px]">Email: {seller.email}</h1>
+                                            <h1 className="text-white text-lg pl-[50px]">Phone: {seller.mobileNumber}</h1>
+                                            <button className="text-white font-bold bg-green-600 w-[100px] h-[30px] ml-[50px] mt-[50px]" onClick={() => handleSellerApproval(seller._id)}>Accept ✓ </button>
+                                            <button className="text-white font-bold bg-red-600 w-[100px] h-[30px] ml-[30px] mt-[50px]" >Reject ✕ </button>
 
                                         </div>
                                     ))

@@ -11,4 +11,13 @@ const getSellers=async(req,res)=>{
     }
 }
 
-module.exports={getSellers} 
+const approveSeller=async(req,res)=>{
+    try{
+        const {sellerId}=req.body
+        console.log(sellerId)
+    }catch(err){
+        console.log(err)
+    }
+}
+
+module.exports={getSellers,approveSeller} 
