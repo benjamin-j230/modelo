@@ -19,6 +19,9 @@ export default function Admin() {
     async function handleSellerApproval(sellerId){
         try{
             const res = await axios.post(`http://localhost:5000/admin/sellerApproval`, {sellerId})
+            if(res.data.success){
+                window.location.reload()
+            }
         }catch(err){
             console.log(err)
         }

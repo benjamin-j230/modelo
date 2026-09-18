@@ -39,7 +39,6 @@ const sellerSchema = mongoose.Schema({
     },
     seller: {
         type: String,
-        required: true
     },
     product: [
         {
