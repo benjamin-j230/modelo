@@ -12,6 +12,8 @@ export default function Admin() {
             const res = await axios.get(`http://localhost:5000/admin/sellers`)
             setSellers(res.data)
             console.log(res.data)
+            const productsRes= await axios.get(`http://localhost:5000/admin/products`)
+            console.log(productsRes.data)
         }
         fetchData()
     },[])

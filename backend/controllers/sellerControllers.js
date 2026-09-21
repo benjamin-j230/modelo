@@ -84,7 +84,7 @@ const loginSeller = async (req, res, email, password, role,val) => {
 
                 res.redirect("http://localhost:3000/sellerView");
             }
-            else{
+            else if(val==0){
             return res.json({ success: true, token, seller })
             }
     }
@@ -108,20 +108,21 @@ const getSeller = async (req, res) => {
 const addProduct = async (req, res) => {
     try {
         const seller = await Seller.findById(req.Id)
-        console.log(seller)
-        console.log(req.body.brand)
-        console.log(req.file.filename)
+        const admin=await Admin.findOne()
         if (!seller) {
             return res.status(404).json({ message: "user not found" })
         }
         else {
-            seller.product.push({
+            admin.products.push({
+                seller:seller,
                 brand: req.body.brand,
                 model: req.body.model,
+                description:req.body.description,
+                scale:req.body.scale,
                 price: req.body.price,
                 image: req.file.filename
             })
-            await seller.save()
+            await admin.save()
             return res.json({ success: true, message: "product added successfully" })
         }
     } catch (err) {

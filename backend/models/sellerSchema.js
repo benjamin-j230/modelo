@@ -45,7 +45,9 @@ const sellerSchema = mongoose.Schema({
             brand: String,
             model: String,
             price: Number,
-            image: String
+            image: String,
+            description:String,
+            scale:String,
         }
     ],
     location: {

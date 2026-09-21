@@ -378,14 +378,15 @@ export default function SellerView() {
                         ))
                     }
                 </div>
-                  <footer className="bg-black w-full h-[30vh] relative bottom-0 overflow-x-hidden flex justify-center" >
-  <div className="relative max-[500px]:top-[30px] bottom-[50px] flex w-full items-center lg:w-auto mt-4">
-            <div className="mt-0 text-2xl font-bold uppercase tracking-[0.2em] text-[#ff8a7a] max-[500px]:text-xl">
-              Modelo
+                 
             </div>
-          </div>
-</footer>
-            </div>
+            <footer className="bg-zinc-900 w-full h-[30vh] relative border-t border-red-700  bottom-0 overflow-x-hidden flex justify-center" >
+                    <div className="relative max-[500px]:top-[30px] bottom-[50px] flex w-full items-center lg:w-auto">
+                        <div className="mt-0 text-2xl font-bold uppercase tracking-[0.2em] text-[#ff8a7a] max-[500px]:text-xl">
+                            Modelo
+                        </div>
+                    </div>
+                </footer>
 
 
         </div>

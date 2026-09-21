@@ -14,7 +14,10 @@ const adminSchema = new mongoose.Schema({
     {
       
     }
-  ]
+  ],
+  products:[{
+    
+  }]
 });
 
 const Admin = mongoose.model("Admin", adminSchema);

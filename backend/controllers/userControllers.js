@@ -108,7 +108,7 @@ const login = async (req, res, data) => {
 
                 res.redirect("http://localhost:3000/userPage");
             }
-            else{
+            else if(val==0){
             return res.json({ success: true, token, user })
             }
         }

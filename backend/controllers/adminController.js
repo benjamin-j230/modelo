@@ -40,4 +40,14 @@ const approveSeller=async(req,res)=>{
     }
 }
 
-module.exports={getSellers,approveSeller} 
+const getProducts=async(req,res)=>{
+    try{
+        const admin=await Admin.findOne()
+        const products=admin.products
+        return res.json(products)
+    }catch(err){
+        console.log(err)
+    }
+}
+
+module.exports={getSellers,approveSeller,getProducts} 
