@@ -5,6 +5,8 @@ export default function Admin() {
     const [details, setDetails] = useState("")
     const [sellers, setSellers] = useState([])
     const [sellerOptions, setSellerOptions] = useState("")
+    const [products,setProducts]=useState([])
+    const [productViewOption,setProductViewOption]=useState("")
 
 
     useEffect(() => {
@@ -12,22 +14,35 @@ export default function Admin() {
             const res = await axios.get(`http://localhost:5000/admin/sellers`)
             setSellers(res.data)
             console.log(res.data)
-            const productsRes= await axios.get(`http://localhost:5000/admin/products`)
+            const productsRes = await axios.get(`http://localhost:5000/admin/products`)
+            setProducts(productsRes.data)
             console.log(productsRes.data)
         }
         fetchData()
-    },[])
+    }, [])
 
-    async function handleSellerApproval(sellerId){
-        try{
-            const res = await axios.post(`http://localhost:5000/admin/sellerApproval`, {sellerId})
-            if(res.data.success){
+    async function handleSellerApproval(sellerId) {
+        try {
+            const res = await axios.post(`http://localhost:5000/admin/sellerApproval`, { sellerId })
+            if (res.data.success) {
                 window.location.reload()
             }
-        }catch(err){
+        } catch (err) {
             console.log(err)
         }
 
+    }
+
+    async function handleProductApproval(productId){
+        try{
+            const res=await axios.post('http://localhost:5000/admin/productApproval',{productId})
+             if (res.data.success) {
+                window.location.reload()
+            }
+        }
+        catch(err){
+            console.log(err)
+        }
     }
 
 
@@ -45,13 +60,13 @@ export default function Admin() {
                         </div>
                     </div>
                 </nav>
-                <div className="min-h-screen w-full overflow-x-hidden bg-[oklch(21%_0.034_264.665)] flex justify-center">
+                <div className="min-h-screen w-full overflow-x-hidden bg-[oklch(21%_0.034_264.665)] flex flex-wrap justify-center content-start">
                     <button className={` text-2xl text-center h-[50px] w-[200px] bg-slate-950 border-b border-r border-gray-500 hover:cursor-pointer hover:border-b-red-700 ${details === "seller" ? "border-b-red-700" : ""} ${details === "seller" ? "text-red-700" : "text-white"} `} onClick={() => setDetails("seller")}>Seller details</button>
                     <button className={` text-2xl text-center h-[50px] w-[200px] bg-slate-950 border-b  border-gray-500 hover:cursor-pointer hover:border-b-red-700 ${details === "user" ? "border-b-red-700" : ""} ${details === "user" ? "text-red-700" : "text-white"} `} onClick={() => setDetails("user")}>User details</button>
 
                     {
                         details === "seller" &&
-                        <div className="min-h-full w-full bg-black overflow-x-hidden absolute top-[30vh] flex justify-center flex-wrap ">
+                        <div className={`min-h-fit w-full mt-[10vh] bg-black overflow-x-hidden flex justify-center flex-wrap `}>
                             <button className={` text-xl text-center h-[50px] w-[200px] bg-black border-b border-r border-gray-500 hover:cursor-pointer hover:border-b-red-700${sellerOptions === "approval" ? " border-b-red-700" : ""} ${sellerOptions === "approval" ? "text-red-700" : "text-white"}`} onClick={() => setSellerOptions("approval")}>Seller approval</button>
                             <button className={` text-xl text-center h-[50px] w-[200px] bg-black border-b border-r border-gray-500 hover:cursor-pointer hover:border-b-red-700 ${sellerOptions === "viewSeller" ? " border-b-red-700" : ""} ${sellerOptions === "viewSeller" ? "text-red-700" : "text-white"}`} onClick={() => setSellerOptions("viewSeller")}>View sellers</button>
                             <button className={` text-xl text-center h-[50px] w-[200px] bg-black border-b border-gray-500 hover:cursor-pointer hover:border-b-red-700 ${sellerOptions === "product" ? " border-b-red-700" : ""} ${sellerOptions === "product" ? "text-red-700" : "text-white"}`} onClick={() => setSellerOptions("product")}>Product approval</button>
@@ -59,27 +74,77 @@ export default function Admin() {
 
 
                             {sellerOptions === "approval" &&
-                            <div className="min-h-full w-full basis-full -mt-[30vh] flex justify-center gap-5 ">
-                                {
-                                    sellers.map(seller=>(
-                                        <div className="w-fit min-w-[20vw] h-[50vh] border border-red-700 rounded-xl bg-slate-950 justify-center" key={seller._id} >
-                                            <h1 className="text-white text-2xl text-center" >{seller.shop}</h1><br/>
-                                            <h1 className="text-white text-lg pl-[50px]" >Address: {seller.address[0].street},</h1>
-                                            <h1 className="text-white text-lg pl-[120px] ">{seller.address[0].city}</h1>
+                                <div className="min-h-fit h-[80vh] w-full basis-full mt-[10vh]  flex justify-center gap-5 flex-wrap ">
+                                    {
+                                        sellers.map(seller => (
+                                            <div className="w-fit min-w-[20vw] h-[50vh] border border-red-700 rounded-xl bg-slate-950 justify-center" key={seller._id} >
+                                                <h1 className="text-white text-2xl text-center" >{seller.shop}</h1><br />
+                                                <h1 className="text-white text-lg pl-[50px]" >Address: {seller.address[0].street},</h1>
+                                                <h1 className="text-white text-lg pl-[120px] ">{seller.address[0].city}</h1>
 
-                                            <h1 className="text-white text-lg pl-[120px] ">{seller.address[0].state}</h1>
-                                            <h1 className="text-white text-lg pl-[50px]">Pin code: {seller.address[0].pinCode}</h1>
-                                            <h1 className="text-white text-lg pl-[50px]">Email: {seller.email}</h1>
-                                            <h1 className="text-white text-lg pl-[50px]">Phone: {seller.mobileNumber}</h1>
-                                            <button className="text-white font-bold bg-green-600 w-[100px] h-[30px] ml-[50px] mt-[50px]" onClick={() => handleSellerApproval(seller._id)}>Accept ✓ </button>
-                                            <button className="text-white font-bold bg-red-600 w-[100px] h-[30px] ml-[30px] mt-[50px]" >Reject ✕ </button>
+                                                <h1 className="text-white text-lg pl-[120px] ">{seller.address[0].state}</h1>
+                                                <h1 className="text-white text-lg pl-[50px]">Pin code: {seller.address[0].pinCode}</h1>
+                                                <h1 className="text-white text-lg pl-[50px]">Email: {seller.email}</h1>
+                                                <h1 className="text-white text-lg pl-[50px]">Phone: {seller.mobileNumber}</h1>
+                                                <button className="text-white font-bold bg-green-600 w-[100px] h-[30px] ml-[50px] mt-[50px]" onClick={() => handleSellerApproval(seller._id)}>Accept ✓ </button>
+                                                <button className="text-white font-bold bg-red-600 w-[100px] h-[30px] ml-[30px] mt-[50px]" >Reject ✕ </button>
 
-                                        </div>
-                                    ))
-                                }
+                                            </div>
+                                        ))
+                                    }
 
                                 </div>
 
+                            }
+                            {
+                                sellerOptions === "product" &&
+                                
+                                <div className="min-h-fit w-full basis-full mt-[10vh]  flex justify-center gap-5 flex-wrap ">
+                                   
+                                        {
+                                           products.map(product=>(
+                                            <div className=" w-fit min-w-[20vw] min-h-[50vh] border border-red-700 rounded-xl bg-slate-950 justify-center" key={product._id}>
+                                                {productViewOption===product._id?(
+                                                    <div>
+                                                    <h1 className="text-white text-lg text-center mt-[10px]">Seller details</h1>
+                                                    <h1 className="text-white text-lg text-center mt-[10px]">Shop Name: {product.seller.shop}</h1>
+                                                     <h1 className="text-white text-lg text-center mt-[10px]">Seller email: {product.seller.email}</h1>
+                                                     <h1 className="text-white text-lg text-center mt-[10px]">Seller mobile: {product.seller.mobileNumber}</h1>
+                                                         <h1 className="text-white text-lg pl-[50px]" >Address: {product.seller.address[0].street},</h1>
+                                                <h1 className="text-white text-lg pl-[120px] ">{product.seller.address[0].city}</h1>
+
+                                                <h1 className="text-white text-lg pl-[120px] ">{product.seller.address[0].state}</h1>
+                                                <h1 className="text-white text-lg pl-[50px]">Pin code: {product.seller.address[0].pinCode}</h1>
+                                                <button className="border border-white/20 bg-black px-8 py-4 text-[10px] font-bold tracking-widest text-red-700 rounded-full mt-[20px] ml-[10px] uppercase transition-all hover:bg-red-700 hover:text-white shadow-[0_0_18px_rgba(128,128,128,0.6)] " onClick={()=>setProductViewOption("")} >Back</button>
+                                                
+
+                                                    </div>
+                                                ):(
+                                                <div>
+                                                <h1 className="text-white text-lg text-center mt-[10px]">Brand: {product.brand}</h1>
+                                                <h1 className="text-white text-lg text-center mt-[10px] max-w-[20vw] break-words">Description: {product.description}</h1>
+                                                <h1 className="text-white text-lg text-center mt-[10px]">Model: {product.model}</h1>
+                                                <h1 className="text-white text-lg text-center mt-[10px]">Price: {product.price}</h1>
+                                                <h1 className="text-white text-lg text-center mt-[10px]">Scale: {product.scale}</h1>
+                                                <div>
+                                                <button className="border border-white/20 bg-black px-8 py-4 text-[10px] font-bold tracking-widest text-red-700 rounded-full mt-[20px] ml-[10px] uppercase transition-all hover:bg-red-700 hover:text-white shadow-[0_0_18px_rgba(128,128,128,0.6)] " onClick={()=>setProductViewOption(product._id)} >view seller</button>
+                                                <button className="border border-white/20 bg-black px-8 py-4 text-[10px] font-bold tracking-widest text-red-700 rounded-full mt-[20px] ml-[10px] mr-[10px] uppercase transition-all hover:bg-red-700 hover:text-white shadow-[0_0_18px_rgba(128,128,128,0.6)] ">View images</button>
+                                                </div>
+                                                <div>
+                                                 <button className="text-white font-bold bg-green-600 w-[100px] h-[30px] ml-[40px] mt-[20px] mb-[10px]"  onClick={()=>handleProductApproval(product._id)}>Accept ✓ </button>
+                                                <button className="text-white font-bold bg-red-600 w-[100px] h-[30px] ml-[30px] mt-[20px] mb-[10px] " >Reject ✕ </button>
+                                                </div>
+                                                </div>
+                                                )
+}
+
+                                                
+                                                </div>
+                                           ))
+                                        }
+
+                                        </div>
+                            
                             }
                         </div>
 

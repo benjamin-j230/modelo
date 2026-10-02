@@ -367,11 +367,17 @@ export default function SellerView() {
                         sellerProducts.map((product, index) => (
                             <div key={index} className="relative h-[60vh] w-[20vw] bg-black border-2 border-red-500 m-8 hover:scale-105">
                                 <img src={`http://localhost:5000/uploads/${product.image}`} alt={product.image} className=" w-[95%] h-[50%] mx-auto" />
-                                <h1 className="relative top-[5px] text-white font-bold text-xl text-center">{product.model}</h1>
+                                <h1 className="relative top-[5px] text-white font-bold text-xl text-center">model: {product.model}</h1>
+                                
+                                <h1 className="text-white text-lg font-bold text-center mt-[10px] max-w-[20vw] break-words">Description: {product.description}</h1>
 
-                                <h1 className="relative top-[5px] text-white font-bold text-xl text-center"> ₹{product.price}</h1>
+                                <h1 className="relative top-[5px] text-white font-bold text-xl text-center">Price: ₹{product.price}</h1>
+                                <h1 className="relative top-[5px] text-white font-bold text-xl text-center">Scale: {product.scale}</h1>
+                                
+
 
                                 <h1 className="relative top-[5px] text-white font-bold text-xl text-center">Brand: {product.brand}</h1>
+
 
                             </div>
 

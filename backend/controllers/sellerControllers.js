@@ -120,7 +120,8 @@ const addProduct = async (req, res) => {
                 description:req.body.description,
                 scale:req.body.scale,
                 price: req.body.price,
-                image: req.file.filename
+                image: req.file.filename,
+                _id: new mongoose.Types.ObjectId(),
             })
             await admin.save()
             return res.json({ success: true, message: "product added successfully" })

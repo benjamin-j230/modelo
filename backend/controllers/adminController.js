@@ -50,4 +50,28 @@ const getProducts=async(req,res)=>{
     }
 }
 
-module.exports={getSellers,approveSeller,getProducts} 
+const approveProduct=async(req,res)=>{
+    try{
+        const {productId}=req.body
+        const admin=await Admin.findOne()
+        const product=await admin.products.find(product=>product._id.toString()===productId)
+        const seller=await Seller.findOne({_id:product.seller._id})
+        seller.product.push({
+            brand: product.brand,
+                model: product.model,
+                description:product.description,
+                scale:product.scale,
+                price: product.price,
+                image: product.image,
+        })
+        await seller.save()
+        admin.products=admin.products.filter(product=>product._id.toString()!==productId)
+        await admin.save()
+        sendEmail(seller.email,"Product Approval","Your product has been approved. You can now sell this product on modelo. Thank you for choosing modelo.")
+        res.json({success:true})
+    }catch(err){
+        console.log(err)
+    }
+}
+
+module.exports={getSellers,approveSeller,getProducts,approveProduct} 
