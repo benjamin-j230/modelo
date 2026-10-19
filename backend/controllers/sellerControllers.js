@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const { findByIdAndUpdate } = require('../models/userSchema');
 const Admin = require('../models/adminSchema')
 const mongoose = require("mongoose");
+const sendEmail=require('../utils/sendEmail')
 const addSeller = async (req, res, data, state) => {
     try {
         const existingSeller = await Seller.findOne({ email: data.email });
@@ -23,10 +24,12 @@ const addSeller = async (req, res, data, state) => {
                 }],
                 mobileNumber: state.mobile,
                 seller: state.seller,
+                lic: state.lic,
 
             })
+            console.log(state.lic)
             verifySeller(seller)
-            return res.redirect("http://localhost:3000/?message=seller_verification");
+            return res.redirect(`http://localhost:3000/licenseUpload?message=upload_license&email=${data.email}`);
         }
         else {
             return res.redirect(
@@ -40,30 +43,30 @@ const addSeller = async (req, res, data, state) => {
     }
 }
 
-const verifySeller=async(seller)=>{
-    const admin=await Admin.find()
+const verifySeller = async (seller) => {
+    const admin = await Admin.find()
     console.log(admin[0])
     await admin[0].updateOne({
         $push: { sellers: seller }
     })
-    
+
 }
 
 
 
-const loginSeller = async (req, res, email, password, role,val) => {
+const loginSeller = async (req, res, email, password, role, val) => {
     try {
         console.log(role)
         const seller = await Seller.findOne({ email })
         if (!seller) {
             return res.status(401).json({ message: "user not registered" })
         }
-        if(val==0){
-        const isMatch = await bcrypt.compare(password, seller.password)
-        if (isMatch == false) {
-            return res.status(401).json({ message: "password not correct" })
+        if (val == 0) {
+            const isMatch = await bcrypt.compare(password, seller.password)
+            if (isMatch == false) {
+                return res.status(401).json({ message: "password not correct" })
+            }
         }
-    }
         const token = jwt.sign(
             {
                 id: seller._id,
@@ -76,17 +79,17 @@ const loginSeller = async (req, res, email, password, role,val) => {
                 expiresIn: "1d"
             }
         )
-         if (val == 1) {
-                res.cookie("token", token, {
-                    secure: false,
-                    sameSite: "lax"
-                });
+        if (val == 1) {
+            res.cookie("token", token, {
+                secure: false,
+                sameSite: "lax"
+            });
 
-                res.redirect("http://localhost:3000/sellerView");
-            }
-            else if(val==0){
+            res.redirect("http://localhost:3000/sellerView");
+        }
+        else if (val == 0) {
             return res.json({ success: true, token, seller })
-            }
+        }
     }
     catch (err) {
         console.log(err)
@@ -108,22 +111,20 @@ const getSeller = async (req, res) => {
 const addProduct = async (req, res) => {
     try {
         const seller = await Seller.findById(req.Id)
-        const admin=await Admin.findOne()
         if (!seller) {
             return res.status(404).json({ message: "user not found" })
         }
         else {
-            admin.products.push({
-                seller:seller,
+            seller.product.push({
                 brand: req.body.brand,
                 model: req.body.model,
-                description:req.body.description,
-                scale:req.body.scale,
+                description: req.body.description,
+                scale: req.body.scale,
                 price: req.body.price,
                 image: req.file.filename,
-                _id: new mongoose.Types.ObjectId(),
+                stock:req.body.stock,
             })
-            await admin.save()
+            await seller.save()
             return res.json({ success: true, message: "product added successfully" })
         }
     } catch (err) {
@@ -156,15 +157,14 @@ const saveLocation = async (req, res) => {
 }
 
 
-const addOrders = async (req, res,userId,productData,user) => {
+const addOrders = async (req, res, userId, productData, user,addressType) => {
     const { sellerId, ...product } = productData
-    console.log("hi")
-    console.log(product,sellerId)
+    console.log(product, sellerId)
     const currentUser = await User.findById(user._id)
     const seller = await Seller.findById(sellerId)
-    currentUser.orders.push({ ...product, status: "order placed" })
+    currentUser.orders.push({ ...product, status: "order placed",addressType:addressType })
     product.user = user
-    seller.orders.push(product)
+    seller.orders.push({...product,addressType:addressType})
     await seller.save()
     await currentUser.save()
     return { message: "order placed successfully" }
@@ -216,7 +216,7 @@ const updateStatus = async (req, res) => {
         );
         await User.updateOne(
             { "orders._id": new mongoose.Types.ObjectId(req.params.id) },
-             { $set: { "orders.$.status": status } }
+            { $set: { "orders.$.status": status } }
         )
         order.status = status
         seller.markModified("acceptedOrders")
@@ -228,4 +228,23 @@ const updateStatus = async (req, res) => {
     }
 }
 
-module.exports = { addSeller, loginSeller, getSeller, addProduct, saveLocation, addOrders, acceptOrder, getAcceptedOrder, updateStatus }
+const reduceStock=async(req,res,userId,productData,user)=>{
+    try{
+    const { sellerId, ...product } = productData
+    const seller=await Seller.findById(sellerId)
+    const products=seller.product
+    const currentProduct=products.find(item=>item.id==product._id)
+    if(currentProduct.stock<=5){
+        sendEmail(seller.email,"Low stocks",`Your product ${currentProduct.brand} ${currentProduct.model} with cost ${currentProduct.price} has less than 5 stocks`)
+    }
+    if(currentProduct.stock>0){
+    currentProduct.stock=currentProduct.stock-1
+    }
+    await seller.save()
+    
+    }catch(err){
+        console.log(err)
+    }
+}
+
+module.exports = { addSeller, loginSeller, getSeller, addProduct, saveLocation, addOrders, acceptOrder, getAcceptedOrder, updateStatus, reduceStock }

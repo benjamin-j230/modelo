@@ -48,6 +48,7 @@ const sellerSchema = mongoose.Schema({
             image: String,
             description:String,
             scale:String,
+            stock:Number
         }
     ],
     location: {
@@ -63,6 +64,12 @@ const sellerSchema = mongoose.Schema({
     acceptedOrders: [],
     status:{
         type:String,
+    },
+    lic:{
+        type:Number
+    },
+    licenseImage:{
+        type:String
     }
 })
 sellerSchema.index({ location: "2dsphere" });

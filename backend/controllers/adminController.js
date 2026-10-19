@@ -1,6 +1,7 @@
 const Admin=require('../models/adminSchema')
 const Seller=require('../models/sellerSchema')
 const sendEmail=require('../utils/sendEmail')
+const User=require('../models/userSchema')
 const getSellers=async(req,res)=>{
     try{
         const admin=await Admin.findOne()
@@ -50,28 +51,32 @@ const getProducts=async(req,res)=>{
     }
 }
 
-const approveProduct=async(req,res)=>{
+
+const getUsers=async(req,res)=>{
     try{
-        const {productId}=req.body
+        const users=await User.find()
+        return res.json(users)
+    }catch(err){
+        console.log(err)
+    }
+}
+
+const uploadLicense=async(req,res)=>{
+    try{
+        const email=req.body.email
         const admin=await Admin.findOne()
-        const product=await admin.products.find(product=>product._id.toString()===productId)
-        const seller=await Seller.findOne({_id:product.seller._id})
-        seller.product.push({
-            brand: product.brand,
-                model: product.model,
-                description:product.description,
-                scale:product.scale,
-                price: product.price,
-                image: product.image,
-        })
-        await seller.save()
-        admin.products=admin.products.filter(product=>product._id.toString()!==productId)
+        const seller=await admin.sellers.find(seller=>seller.email===email)
+        console.log(seller)
+        seller.lic=1
+        seller.licenseImage=req.file.filename
         await admin.save()
-        sendEmail(seller.email,"Product Approval","Your product has been approved. You can now sell this product on modelo. Thank you for choosing modelo.")
+        sendEmail(seller.email,"License Upload","Your license has been uploaded. We will verify your license and notify you when we accept through email.")
         res.json({success:true})
     }catch(err){
         console.log(err)
     }
 }
 
-module.exports={getSellers,approveSeller,getProducts,approveProduct} 
+
+
+module.exports={getSellers,approveSeller,getProducts,getUsers,uploadLicense} 

@@ -9,6 +9,7 @@ export default function AddProduct() {
     const [price, setPrice] = useState("")
     const [scale,setScale]=useState("")
     const [description,setDescription]=useState("")
+    const [stock,setStock]=useState(0)
     const nav = useNavigate()
     function handleImageChange(e) {
         const file = e.target.files[0];
@@ -24,6 +25,7 @@ export default function AddProduct() {
         formData.append('image', image)
         formData.append('description',description)
         formData.append('scale',scale)
+        formData.append('stock',stock)
         try {
             const res = await axios.post('http://localhost:5000/seller/addProduct', formData,
                 {
@@ -33,7 +35,7 @@ export default function AddProduct() {
                 }
             )
             if (res.data.success === true) {
-                alert("Product requested to add. We will verify your product and notify you when we accept through email.")
+                alert("Product successfully added")
             }
             nav("/sellerView")
         } catch (err) {
@@ -42,7 +44,7 @@ export default function AddProduct() {
     }
     return (
         <div className=' flex justify-center items-center h-screen w-screen bg-cover bg-no-repeat' style={{ backgroundImage: `url(${bgImage})` }}>
-            <div className='flex justify-center shadow-[0_0_8px_black] rounded-3xl object-center bg-black/50 max-[500px]:w-screen sm:w-screen md:w-1/3 max-[500px]:h-screen sm:h-screen max-[500px]:rounded-none  md:h-1/2 relative'>
+            <div className='flex justify-center shadow-[0_0_8px_black] rounded-3xl object-center bg-black/50 max-[500px]:w-screen sm:w-screen md:w-1/3 max-[500px]:h-screen sm:h-screen max-[500px]:rounded-none  md:h-[60vh] relative'>
 
 
                 <label className="absolute top-[20px] left-[50px] text-white text-lg font-semibold max-[500px]:top-[320px]" >Brand: </label>
@@ -77,6 +79,11 @@ export default function AddProduct() {
                     onChange={handleImageChange}
                     className="absolute top-[290px] left-[200px] text-white hover:cursor-pointer"
                 />
+
+
+                <label className="absolute top-[330px] left-[50px] text-white text-lg font-semibold max-[500ps]:top-[360px] ">Number of stocks:</label>
+                <input type="number" placeholder="stocks" className="w-[160px] h-8 absolute top-[330px] left-[220px] rounded-2xl border-2 focus:border-black focus:scale-105 max-[500px]:w-[180px] max-[500px]:left-[150px] max-[500px]:text-md max-[500px]:top-[320px] pl-2" value={stock} onChange={(e) => setStock(e.target.value)} ></input>
+
 
 
                 <button className="absolute bottom-[20px] right-[60px] bg-white h-[30px] w-[50px] text-red-700 font-bold shadow-[0 0 8px black] max-[500px]:bottom-[210px] active:text-black hover:scale-105" onClick={handleAddProduct} >Add</button>

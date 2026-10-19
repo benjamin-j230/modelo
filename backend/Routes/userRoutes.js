@@ -13,5 +13,10 @@ router.get("/getProfile",middleWare.auth,userControllers.getData)
 router.get("/getProducts",userControllers.getProducts)
 router.get("/getOrders",middleWare.auth,userControllers.getOrders)
 router.get("/getSellers",userControllers.getSellers)
+router.post("/addToCart",middleWare.auth,userControllers.addToCart)
+router.get("/getCart",middleWare.auth,userControllers.getCart)
+router.patch("/incrementCart/:id",middleWare.auth,userControllers.incrementCart)
+router.patch("/decrementCart/:id",middleWare.auth,userControllers.decrementCart)
+router.post("/addSecondaryAddress",middleWare.auth,userControllers.addSecondaryAddress)
 
 module.exports=router

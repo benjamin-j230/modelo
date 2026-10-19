@@ -8,7 +8,7 @@ import { useContext } from 'react'
 import thisContext from './context'
 export default function EmailVerification() {
     const nav = useNavigate()
-    const { shop, password, street, district, city, state, pin, mobile, house, seller, setSeller } = useContext(thisContext)
+    const { shop, password, street, district, city, state, pin, mobile, house, seller, setSeller,GSTIN, } = useContext(thisContext)
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -46,6 +46,7 @@ export default function EmailVerification() {
                 } else if (seller === "username") {
                     sellerValue = "private seller";
                 }
+                const lic=0
                 const res = await axios.post('http://localhost:5000/user/register', {
                     password: password,
                     shop: shop,
@@ -55,6 +56,8 @@ export default function EmailVerification() {
                     pin: pin,
                     mobile: mobile,
                     seller: sellerValue,
+                    GSTIN:GSTIN,
+                    lic:lic,
                     role: localStorage.getItem("role")
                 })
 

@@ -41,7 +41,18 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    orders:[]
+    orders:[],
+    cart:[
+        {
+            product:{
+
+            },
+            quantity:{
+                type:Number,
+                default:1
+            }
+        }
+    ]
 })
 const User = mongoose.model("User", userSchema)
 module.exports = User

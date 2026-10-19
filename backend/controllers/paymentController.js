@@ -47,7 +47,8 @@ const verifyPayment = async (req, res) => {
             razorpay_order_id,
             razorpay_signature,
             product,
-            user
+            user,
+            addressType
         } = req.body;
 
         const body = razorpay_order_id + "|" + razorpay_payment_id;
@@ -59,7 +60,8 @@ const verifyPayment = async (req, res) => {
 
         if (expectedSignature === razorpay_signature) {
             console.log("payment success")
-            const result=await sellerController.addOrders(req,res,req.Id,product,user)
+            const result=await sellerController.addOrders(req,res,req.Id,product,user,addressType)
+            await sellerController.reduceStock(req,res,req.Id,product,user)
             const data=result.message
             return res.json({data:data})
             

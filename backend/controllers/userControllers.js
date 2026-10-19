@@ -61,7 +61,6 @@ const userEmail = async (req, res, next) => {
 
 
 const login = async (req, res, data) => {
-    console.log("hi")
     try {
         if (typeof (data) === "function") {
             var val = 0
@@ -108,12 +107,12 @@ const login = async (req, res, data) => {
 
                 res.redirect("http://localhost:3000/userPage");
             }
-            else if(val==0){
-            return res.json({ success: true, token, user })
+            else if (val == 0) {
+                return res.json({ success: true, token, user })
             }
         }
         else if (setRole == "seller") {
-            sellerController.loginSeller(req, res, email, password, setRole,val)
+            sellerController.loginSeller(req, res, email, password, setRole, val)
         }
 
     } catch (err) {
@@ -163,13 +162,88 @@ const getOrders = async (req, res) => {
 }
 
 
-const getSellers=async(req,res)=>{
+const getSellers = async (req, res) => {
+    try {
+        const sellers = await Seller.find()
+        return res.json({ success: true, sellers })
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const addToCart = async (req, res) => {
+    try {
+        const { product } = req.body
+        const user = await User.findById(req.Id)
+        user.cart.push({
+            product: product,
+            quantity: 1
+        });
+        await user.save()
+        return res.json({ success: true })
+
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const getCart = async (req, res) => {
+    try {
+        const user = await User.findById(req.Id)
+        const cart = user.cart
+        return res.json(cart)
+
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const incrementCart = async (req, res) => {
+    try {
+        const { id } = req.params
+        const userId = req.Id
+        const user = await User.findById(userId);
+        const cartItem=user.cart.find(item => item._id.toString() === id);
+        cartItem.quantity += 1;
+        await user.save();
+        return res.json({success:true})
+
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const decrementCart = async (req, res) => {
+    try {
+        const { id } = req.params
+        const userId = req.Id
+        const user = await User.findById(userId);
+        const cartItem=user.cart.find(item => item._id.toString() === id);
+        cartItem.quantity -= 1;
+        await user.save();
+        return res.json({success:true})
+
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const addSecondaryAddress=async(req,res)=>{
     try{
-        const sellers=await Seller.find()
-        return res.json({success:true,sellers})
+        const {house,city,district,state,pinCode}=req.body
+        const user=await User.findById(req.Id)
+        user.address.push({
+            house,
+            city,
+            district,
+            state,
+            pinCode,
+        })
+        await user.save()
+        return res.json({success:true})
     }catch(err){
         console.log(err)
     }
 }
 
-module.exports = { addUser, userEmail, login, getData, getProducts, getOrders, getSellers }
+module.exports = { addUser, userEmail, login, getData, getProducts, getOrders, getSellers, addToCart, getCart, incrementCart, decrementCart,addSecondaryAddress }

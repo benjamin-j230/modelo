@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import { use, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import thisContext from './components/context';
 import FirstPage from './components/firstPage'
@@ -19,6 +19,12 @@ import AcceptOrder from './components/acceptOrder';
 import ManageOrder from './components/manageOrder';
 import TrackOrder from './components/trackOrder';
 import Admin from './components/admin';
+import UserCart from './components/userCart';
+import EditProduct from './components/editProduct';
+import LicenseUpload from './components/licenseUpload';
+import ViewLicense from './components/viewLicense';
+import AddSecondaryAddress from './components/addSecondaryAddress';
+import ChooseAddress from './components/chooseAddress';
 
 
 function App() {
@@ -37,7 +43,15 @@ function App() {
   const [user, setUser] = useState(null)
   const [sellerProduct, setSellerProduct] = useState([])
   const [sellerId, setSellerId] = useState("")
-  const [emailLogin,setEmailLogin]=useState(true)
+  const [emailLogin, setEmailLogin] = useState(true)
+  const [GSTIN, setGSTIN] = useState("")
+  const [licenseImage, setLicenseImage] = useState(null)
+  const [selectedLicense, setSelectedLicense] = useState(null);
+  const [primaryAddress,setPrimaryAddress]=useState({})
+  const [secondaryAddressCh,setSecondaryAddressCh]=useState({})
+  const [addressType,setAddressType]=useState("")
+
+
   const val = {
     shop,
     setShop,
@@ -70,7 +84,19 @@ function App() {
     sellerId,
     setSellerId,
     emailLogin,
-    setEmailLogin
+    setEmailLogin,
+    GSTIN,
+    setGSTIN,
+    licenseImage,
+    setLicenseImage,
+    selectedLicense,
+    setSelectedLicense,
+    primaryAddress,
+    setPrimaryAddress,
+    secondaryAddressCh,
+    setSecondaryAddressCh,
+    addressType,
+    setAddressType
   }
 
   return (
@@ -90,9 +116,15 @@ function App() {
           <Route path='/sellerView' element={<SellerView />} />
           <Route path='/addProduct' element={<AddProduct />} />
           <Route path='/acceptOrder' element={<AcceptOrder />} />
-          <Route path='/manageOrder' element={<ManageOrder/>}/>
-          <Route path='/trackOrder' element={<TrackOrder/>}/>
-          <Route path='/admin' element={<Admin/>}/>
+          <Route path='/manageOrder' element={<ManageOrder />} />
+          <Route path='/trackOrder' element={<TrackOrder />} />
+          <Route path='/admin' element={<Admin />} />
+          <Route path='/editProduct' element={<EditProduct />} />
+          <Route path='/userCart' element={<UserCart />} />
+          <Route path='/licenseUpload' element={<LicenseUpload />} />
+          <Route path='/viewLicense' element={<ViewLicense/>}/>
+          <Route path='/secondaryAddress' element={<AddSecondaryAddress/>}/>
+          <Route path='/chooseAddress' element={<ChooseAddress/>}/>
         </Routes>
       </BrowserRouter>
     </thisContext.Provider>

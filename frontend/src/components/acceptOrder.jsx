@@ -3,10 +3,13 @@ import thisContext from "./context"
 import "../App.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"
+import { useState } from "react";
+import { useEffect } from "react";
 
 export default function AcceptOrder() {
     const nav = useNavigate()
     const { sellerProduct,sellerId } = useContext(thisContext)
+ 
 
     async function print() {
         alert("Accept order?")
@@ -23,6 +26,7 @@ export default function AcceptOrder() {
         window.print()
         nav('/sellerView')
     }
+    console.log(sellerProduct)
 
     return (
         <div className="relative min-h-screen overflow-x-hidden">
@@ -34,19 +38,55 @@ export default function AcceptOrder() {
 
                 <p className="relative top-[2vh] left-[2vw] text-lg" >Address: </p>
 
-                <p className=" w-[30vw] absolute top-[6vh] left-[7vw] text-lg">{sellerProduct.user.address[0].house}<br></br> {sellerProduct.user.address[0].city}<br></br> {sellerProduct.user.address[0].district}<br></br>{sellerProduct.user.address[0].state}<br></br> pin - {sellerProduct.user.address[0].pinCode}</p>
+              <p className=" w-[30vw] absolute top-[6vh] left-[7vw] text-lg">
+    {sellerProduct.addressType === "primary" ? (
+        <>
+            {sellerProduct.user.address[0].house},{" "}
+            {sellerProduct.user.address[0].city},{" "}
+            <br />
+            {sellerProduct.user.address[0].district},{" "}
+            {sellerProduct.user.address[0].state},{" "}
+            Pin - {sellerProduct.user.address[0].pinCode}
+        </>
+    ) : (
+        <>
+            {sellerProduct.user.address[1].house},{" "}
+            {sellerProduct.user.address[1].city},{" "}
+            <br />
+            {sellerProduct.user.address[1].district},{" "}
+            {sellerProduct.user.address[1].state},{" "}
+            Pin - {sellerProduct.user.address[1].pinCode}
+        </>
+    )}
+</p>
 
                       <p className=" w-[30vw] absolute top-[25vh] left-[2vw] text-lg">Mobile number: {sellerProduct.user.mobileNumber}</p>
 
                 {/*for print page*/}
                 <div className="print-item">
                       <p className="whitespace-nowrap absolute top-[2vh] left-[2vw] text-lg" >Name:  {sellerProduct.user.name}</p>
-                    <p className="whitespace-nowrap w-[30vw]  absolute top-[8vh] left-[2vw] text-lg" >Address:   {sellerProduct.user.address[0].house},{" "}
-                        {sellerProduct.user.address[0].city},{" "}<br></br>
-                        {sellerProduct.user.address[0].district},{" "}
-                        {sellerProduct.user.address[0].state},{" "}
-                        pin - {sellerProduct.user.address[0].pinCode} </p>
-
+                   <p className="whitespace-nowrap w-[30vw] absolute top-[8vh] left-[2vw] text-lg">
+    Address:{" "}
+    {sellerProduct.addressType === "primary" ? (
+        <>
+            {sellerProduct.user.address[0].house},{" "}
+            {sellerProduct.user.address[0].city},{" "}
+            <br />
+            {sellerProduct.user.address[0].district},{" "}
+            {sellerProduct.user.address[0].state},{" "}
+            Pin - {sellerProduct.user.address[0].pinCode}
+        </>
+    ) : (
+        <>
+            {sellerProduct.user.address[1].house},{" "}
+            {sellerProduct.user.address[1].city},{" "}
+            <br />
+            {sellerProduct.user.address[1].district},{" "}
+            {sellerProduct.user.address[1].state},{" "}
+            Pin - {sellerProduct.user.address[1].pinCode}
+        </>
+    )}
+</p>
                         <p className=" w-[30vw] whitespace-nowrap absolute top-[25vh] left-[2vw] text-lg">Mobile number: {sellerProduct.user.mobileNumber}</p>
 
                 </div>

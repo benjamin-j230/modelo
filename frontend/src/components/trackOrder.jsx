@@ -24,64 +24,47 @@ export default function TrackOrder() {
         getOrder()
     }, [])
     return (
-        <div className="overflow-x-hidden">
-            <div className="min-h-screen w-full bg-[oklch(21%_0.034_264.665)] relative">
-
-                <h1 className="mb-6 text-3xl font-bold leading-[1.1] tracking-tighter uppercase text-red-700 max-[500px]:text-2xl text-center relative top-[30px]">
-                    Track your orders
-                </h1>
-
-                <div className="pt-[20vh] w-full min-h-screen flex flex-wrap gap-4 justify-center
-                        max-[500px]:pt-[5vh]
-                        max-[500px]:px-2
-                        max-[500px]:gap-4
-                        max-[500px]:overflow-x-hidden">
-
-                    {
-                        orders.map((product, index) => (
-                            <div
-                                key={index}
-                                className="h-[60vh] w-[20vw] bg-black hover:scale-105
-                                   max-[500px]:h-[65vh]
-                                   max-[500px]:w-full
-                                   max-[500px]:max-w-[350px]"
-                            >
-
-                                <img
-                                    src={`http://localhost:5000/uploads/${product.image}`}
-                                    className="h-[50%] w-[95%] mx-auto max-[500px]:w-[95%]"
-                                />
-
-                                <h1 className="relative top-[15px] text-white font-bold text-xl text-center max-[500px]:text-lg">
-                                    {product.model}
-                                </h1>
-
-                                <h1 className="relative top-[20px] text-white font-bold text-xl text-center max-[500px]:text-lg">
-                                    Price: {product.price}rs
-                                </h1>
-
-                                <h1 className="relative top-[25px] text-white font-bold text-xl text-center max-[500px]:text-lg">
-                                    Brand: {product.brand}
-                                </h1>
-
-                                <h1 className="relative top-[40px] text-white font-bold text-xl text-center max-[500px]:text-lg">
-                                    Status: {product.status}
-                                </h1>
-
-                            </div>
-                        ))
-                    }
-
-                </div>
-                 <footer className="bg-black w-full h-[30vh] relative bottom-0 overflow-x-hidden flex justify-center" >
-  <div className="relative max-[500px]:top-[30px] bottom-[50px] flex w-full items-center lg:w-auto mt-4">
-            <div className="mt-0 text-2xl font-bold uppercase tracking-[0.2em] text-[#ff8a7a] max-[500px]:text-xl">
-              Modelo
-            </div>
+        <div className="font-sans antialiased overflow-x-hidden bg-gradient-to-b from-gray-900 to-gray-800">
+  <div className="min-h-screen w-full bg-[oklch(21%_0.034_264.665)] relative p-4 md:p-8">
+    {/* Page title */}
+    <h1 className="mb-8 text-4xl font-bold leading-snug tracking-tighter uppercase text-[#ff8a7a] text-center">
+      Track your orders
+    </h1>
+    {/* Orders grid */}
+    <div className="pt-12 w-full flex flex-wrap gap-6 justify-center
+                    max-md:pt-6 max-md:px-2 max-md:gap-4">
+      {orders.map((product, index) => (
+        <div
+          key={index}
+          className="relative h-[60vh] w-[22vw] max-w-sm rounded-xl bg-black/40 backdrop-blur-lg
+                     border border-red-700 shadow-xl hover:scale-105 transform transition
+                     max-md:h-[65vh] max-md:w-full max-md:max-w-[350px]"
+        >
+          {/* Image */}
+          <img
+            src={`http://localhost:5000/uploads/${product.image}`}
+            alt={product.model}
+            className="h-1/2 w-full object-cover rounded-t-lg"
+          />
+          {/* Info block */}
+          <div className="p-4 text-center space-y-2">
+            <h2 className="text-white text-xl font-semibold">{product.model}</h2>
+            <p className="text-gray-300">Price: {product.price} rs</p>
+            <p className="text-gray-300">Brand: {product.brand}</p>
+            <p className="text-gray-300">Status: {product.status}</p>
           </div>
-</footer>
-            </div>
-           
         </div>
+      ))}
+    </div>
+    {/* Footer */}
+   <footer className="bg-zinc-900 relative top-[30px] right-[30px] h-[20vh] mb-0  w-screen py-8 border-t border-red-700 mt-12 flex justify-center">
+      <div className="flex items-center">
+        <h1 className="text-2xl font-bold uppercase tracking-wider text-[#ff8a7a]">
+          Modelo
+        </h1>
+      </div>
+    </footer>
+  </div>
+</div>
     )
 }

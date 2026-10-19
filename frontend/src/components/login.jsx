@@ -15,8 +15,9 @@ export default function Login() {
                 password: password,
                 setRole: localStorage.getItem("role")
             })
-            
+            if(res.data.success){
             localStorage.setItem("token", res.data.token)
+            }
             if (localStorage.getItem("role") === "user") {
                 nav("/userPage")
             }
